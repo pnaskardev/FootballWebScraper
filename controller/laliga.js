@@ -1,6 +1,5 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const fs = require('fs');
 
 
 const url = 'https://www.espn.in/football/table/_/league/esp.1';
@@ -15,19 +14,14 @@ exports.getlaliga=(req,res,next)=>
         (
             response.data,
         );
-        const fullPage=$('.Table__TBODY');
-        console.log(fullPage.attr('class'));
-        // const allDivElements = fullPage.find('div');
-        // const tableDiv = fullPage.find('.tournament-table-standings');
-        // const tableDiv = fullPage.find('#tournament-table');
-        // console.log(tableDiv.attr('id'));
-        // console.log(tableDiv.html());
-        // const allDivInsideTable=tableDiv.children();
-        // console.log(allDivInsideTable.length);
-        // allDivInsideTable.each(function(i, element) 
-        // {   
-        //     console.log('1');
-        //     console.log($(this).attr('class'));
-        // });
+        const table=$('.Table__TBODY');
+        console.log(table.attr('class'));
+        const allTeams=table.children();
+        console.log(allTeams.length);
+        allTeams.each(function(i,element) 
+        {   
+            // console.log($(element).attr('class'));
+            console.log($(element).children().length);
+        });
     });
 }
