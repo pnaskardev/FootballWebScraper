@@ -1,14 +1,14 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-
+const teamModel=require('../models/team');
 const url = 'https://www.espn.in/football/table/_/league/esp.1';
 
-exports.getlaliga=(req,res,next)=>
+exports.getlaliga=async (req,res,next)=>
 {
     var list=[];
     console.log("inside getLaliga block");
-    axios.get(url).then(response=>
+    await axios.get(url).then(response=>
     {
         const $=cheerio.load
         (
@@ -17,24 +17,18 @@ exports.getlaliga=(req,res,next)=>
         const table=$('.Table__TBODY');
         console.log(table.attr('class'));
         const allTeams=table.children();
-        console.log(allTeams.length);
-        // allTeams.each(function(i,element) 
-        // {   
-        //     // console.log($(element).attr('class'));
-        //     // console.log($(element).children().length);
-        
-        // });let
-        for(var i=0;i<20;i++)
+        console.log(allTeams.length/2);
+        for(var i=0;i<allTeams.length/2;i++)
         {
             var j=i+20;
             let child=$(allTeams[i]).children();
             // console.log(child.attr('class'));
             let teamPosition=child.find('.team-position').text();
             // console.log(teamPosition);
-            let teamLogo=child.find('.TeamLink__Logo > a').find('img');
-            // console.log(teamLogo.attr('url'));
+            let teamLogo=child.find('.TeamLink__Logo > a').find('img').attr('src');
             let team=child.find('.hide-mobile > a');
-            let teamname=team.text();
+            let teamName=team.text();
+            // console.log(teamName);
             let tableData=$(allTeams[j]).children();
             let gp=tableData.eq(0).text();
             let w=tableData.eq(1).text();
@@ -44,6 +38,23 @@ exports.getlaliga=(req,res,next)=>
             let a=tableData.eq(5).text();
             let gd=tableData.eq(6).text();
             let p=tableData.eq(7).text();
+            let teamObject=new teamModel
+            (
+                teamPosition,
+                teamLogo,
+                teamName,
+                gp,
+                w,
+                d,
+                l,
+                f,
+                a,
+                gd,
+                p
+            );
+            // console.log(teamObject);
+            list.push(teamObject);
         }
     });
+    console.dir(list);
 }
