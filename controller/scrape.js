@@ -1,11 +1,15 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const dotenv=require('dotenv');
 
+dotenv.config();
 const teamModel=require('../models/team');
-const url = 'https://www.espn.in/football/table/_/league/esp.1';
 
-exports.getlaliga=async (req,res,next)=>
+
+exports.getData=async (league)=>
 {
+    console.log('inside getData');
+    const url = `https://www.espn.in/football/table/_/league/${league}.1`;
     var list=[];
     console.log("inside getLaliga block");
     await axios.get(url).then(response=>
