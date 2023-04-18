@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const { error } = require('console');
 
 
 const getData=require('./controller/scrape').getData;
