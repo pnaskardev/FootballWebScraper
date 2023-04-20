@@ -9,6 +9,9 @@ dotenv.config();
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
 
+// IMPORTS FROM FILES
+const authRouter = require('./routes/auth_route');
+
 
 async function scrapeData() 
 {
@@ -21,6 +24,16 @@ async function scrapeData()
     }
     console.log("Data scraped!");
 } 
+
+// MIDDLEWARES
+app.use(express.json());
+app.use('/auth', authRouter);
+
+app.use('/', (req, res, next) => 
+{
+    console.log('Hello World');
+    res.json({ message: 'OK!!' });
+});
 
 
 
