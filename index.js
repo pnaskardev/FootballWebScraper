@@ -1,13 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
 
 const getData=require('./controller/scrape').getData;
 const app = express();
+
 dotenv.config();
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // IMPORTS FROM FILES
 const authRouter = require('./routes/auth_route');

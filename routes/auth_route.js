@@ -2,7 +2,7 @@
 const express=require('express');
 
 // IMPORTS FROM FILES
-
+const authController=require('../controller/auth_controller');
 
 // INIT
 const authRouter=express.Router();

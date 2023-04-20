@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 // IMPORTS FROM FILES
+const validator=require('../utils/validator');
 const User = require('../models/user');
 
 // INIT
@@ -31,26 +32,33 @@ exports.tokenIsValid = async (req, res, next) => {
 // SIGN UP
 exports.postSignupUser = async (req, res, next) => {
     try {
-        const { name, phone, email, password } = await req.body;
+        const { name,email, password } = await req.body;
         console.log(`${name} ${phone} ${email} ${password}`);
-        const existingUser = await User.findOne({ email }) || await User.findOne({ phone });
-        if (existingUser) {
+        if (!validator.ValidateEmail(email)) 
+        {
             return res.status(400).json
-                ({
-                    msg: "User with same email/phone already exists"
-                });
+            ({
+                message: "Please provide a valid email address"
+            });
+        }
+        const existingUser = await User.findOne({ email }) || await User.findOne({ phone });
+        if (existingUser) 
+        {
+            return res.status(400).json
+            ({
+                msg: "User with same email/phone already exists"
+            });
         }
 
         // return that data to the user 
         const hashedPassword = await bcryptJs.hash(password, 8);
         let user = new User
-            ({
-                name,
-                password: hashedPassword,
-                phone,
-                email,
-                selectedLeagues: []
-            })
+        ({
+            name,
+            password: hashedPassword,
+            email,
+            selectedLeagues: []
+        })
         user = await user.save();
         // res.status(200).json(user);
         const token = jwt.sign({ id: user._id }, process.env.PASS_KEY);
