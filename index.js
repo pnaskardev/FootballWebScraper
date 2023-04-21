@@ -32,7 +32,7 @@ async function scrapeData()
 // MIDDLEWARES
 app.use(express.json());
 app.use('/auth', authRouter);
-app.use('/standings',async (req, res, next) => 
+app.get('/standings',async (req, res, next) => 
 {
     try 
     {
