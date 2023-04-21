@@ -8,6 +8,8 @@ const authController=require('../controller/auth_controller');
 const authRouter=express.Router();
 
 // MIDDLEWARES
+authRouter.post("/tokenIsValid",authController.tokenIsValid);
+
 // SIGN-UP
 authRouter.post("/signup",authController.postSignupUser);
 
