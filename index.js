@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 
 // IMPORTS FROM FILES
 const authRouter = require('./routes/auth_route');
+const profileRouter = require('./routes/profile_route');
 const leagueToCountryMap=require('./utils/utils').leagueToCountryMap;
 const standings=require('./models/standings');
 
@@ -32,6 +33,7 @@ async function scrapeData()
 // MIDDLEWARES
 app.use(express.json());
 app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
 app.get('/standings',async (req, res, next) => 
 {
     try 

@@ -4,12 +4,6 @@ const leagueSchema=require('./league').leagueSchema;
 const userSchema = new mongoose.Schema
 (
     {
-        name: 
-        {
-            type: String,
-            required: true,
-            trim:true
-        },
         email: 
         {
             type: String,
@@ -33,10 +27,11 @@ const userSchema = new mongoose.Schema
         },
         selectedLeagues: 
         { 
-            type: [leagueSchema], 
+            type: [String], 
             default: [] 
         }
-  });
+    }
+);
   
   const User = mongoose.model('User', userSchema);
   

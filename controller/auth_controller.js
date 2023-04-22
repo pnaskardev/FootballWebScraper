@@ -29,11 +29,31 @@ exports.tokenIsValid = async (req, res, next) => {
     }
 }
 
+exports.getUserData=async(req,res,next)=>
+{
+    try 
+    {
+        const token=req.header('x-auth-token');
+        if(!token)
+        {
+            return res.status(401).json({msg:'No auth token access denied'});
+        }
+        const verified=jwt.verify(token,process.env.PASS_KEY);
+        if(!verified)return res.status(401).json({msg:'Token verification failed authorization denied'});
+
+        req.user=verified.id;
+        req.token=token;
+        next();
+    } catch (error) {
+        res.status(500).json({error:error.message});
+    }
+}
+
 // SIGN UP
 exports.postSignupUser = async (req, res, next) => {
     try {
-        const { name,email, password } = await req.body;
-        console.log(`${name} ${phone} ${email} ${password}`);
+        const { email, password } = await req.body;
+        console.log(`${email} ${password}`);
         if (!validator.ValidateEmail(email)) 
         {
             return res.status(400).json
@@ -41,12 +61,12 @@ exports.postSignupUser = async (req, res, next) => {
                 message: "Please provide a valid email address"
             });
         }
-        const existingUser = await User.findOne({ email }) || await User.findOne({ phone });
+        const existingUser = await User.findOne({ email });
         if (existingUser) 
         {
             return res.status(400).json
             ({
-                msg: "User with same email/phone already exists"
+                msg: "User with same email already exists"
             });
         }
 
@@ -54,9 +74,8 @@ exports.postSignupUser = async (req, res, next) => {
         const hashedPassword = await bcryptJs.hash(password, 8);
         let user = new User
         ({
-            name,
-            password: hashedPassword,
             email,
+            password: hashedPassword,
             selectedLeagues: []
         })
         user = await user.save();
