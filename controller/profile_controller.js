@@ -13,6 +13,10 @@ exports.patchSelectedLeagues=async(req,res,next)=>
     const selectedLeagues = req.body;
     console.log(userId);
     console.dir(selectedLeagues);
+    if(!selectedLeagues.length)
+    {
+        return res.status(400).json({message:"selectedLeagues is empty"});
+    }
     try 
     {
         const updatedUser = await User.findByIdAndUpdate

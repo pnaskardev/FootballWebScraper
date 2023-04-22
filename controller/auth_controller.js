@@ -11,7 +11,9 @@ const User = require('../models/user');
 dotenv.config();
 
 // CONTROLLERS
-exports.tokenIsValid = async (req, res, next) => {
+exports.tokenIsValid = async (req, res, next) => 
+{
+
     try {
         const token = req.header('x-auth-token');
         if (!token) return res.json(false);
